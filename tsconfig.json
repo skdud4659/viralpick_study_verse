@@ -1,0 +1,20 @@
+// ys 설정
+// https://www.typescriptlang.org/tsconfig
+{
+  "compilerOptions": {
+    // root 경로
+    "baseUrl": "./",
+    // build 경로
+    "outDir": "./build",
+    "module": "commonjs",
+    "target": "esnext",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "incremental": true
+  }
+}
