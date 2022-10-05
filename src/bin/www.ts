@@ -1,6 +1,7 @@
 import { Application } from 'express'
 import http from 'http'
 import App from '../app'
+import {datasource} from '../datasource'
 
 const debug = require('debug')('www:server')
 const port = normalizePort(process.env.PORT || '3000')
@@ -12,12 +13,14 @@ const httpServer = http.createServer((app))
 app.set('post', port)
 expressApp.setup()
 
-httpServer.listen(port, () => {
-  console.log('Verse Application Is On')
-  console.log(`port: ${port}, ENV: ${process.env.Node_ENV}`)
+datasource.initialize().then(() => {
+  httpServer.listen(port, () => {
+    console.log('Verse Application Is On')
+    console.log(`port: ${port}, ENV: ${process.env.Node_ENV}`)
+  })
+  httpServer.on('error', onError)
+  httpServer.on('listening', onListening)
 })
-httpServer.on('error', onError)
-httpServer.on('listening', onListening)
 
 function normalizePort(value: string): any {
   const portNumber = parseInt(value, 10)

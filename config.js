@@ -8,6 +8,6 @@ exports.default = {
   DOMAIN_MYSQL_PORT: 3306,
   DOMAIN_MYSQL_DB: 'verse',
   DOMAIN_MYSQL_USER: 'root',
-  DOMAIN_MYSQL_PASSWORD: 'root',
+  DOMAIN_MYSQL_PASSWORD: 'vpmember1!',
   DOMAIN_MYSQL_SESSION_DB: 'verse-session'
 }
