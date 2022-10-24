@@ -1,4 +1,4 @@
-import {DataSource} from 'typeorm'
+import { DataSource } from 'typeorm'
 import config from '../config'
 import VerseEntity from './base/entities/verse.entity'
 import PicturesEntity from './common/entities/pictures.entity'
@@ -8,6 +8,7 @@ import PostsEntity from './posts/entities/posts.entity'
 import TypeArticlesEntity from './posts/entities/typeArticles.entity'
 import TypeImagesEntity from './posts/entities/typeImages.entity'
 import TypeVideosEntity from './posts/entities/typeVideos.entity'
+import RequestEntity from './request/entities/request.entity'
 
 export const datasource = new DataSource({
   type: config.DOMAIN_MYSQL_TYPE,
@@ -16,7 +17,7 @@ export const datasource = new DataSource({
   database: config.DOMAIN_MYSQL_DB,
   username: config.DOMAIN_MYSQL_USER,
   password: config.DOMAIN_MYSQL_PASSWORD,
-  synchronize: false, // true - 동기화 가능.
+  synchronize: true, // true - 동기화 가능.
   logging: true,
   entities: [
     VerseEntity,
@@ -26,6 +27,7 @@ export const datasource = new DataSource({
     PostsEntity,
     TypeArticlesEntity,
     TypeImagesEntity,
-    TypeVideosEntity
+    TypeVideosEntity,
+    RequestEntity
   ]
 })
