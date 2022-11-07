@@ -1,11 +1,11 @@
 import { Service } from 'typedi'
 import { datasource } from '../../datasource'
 import PostsEntity from '../entities/posts.entity'
-import PicturesEntity from '../../common/entities/pictures.entity'
 import CityEntity from '../entities/city.entity'
 import TypeImagesEntity from '../entities/typeImages.entity'
 import TypeVideosEntity from '../entities/typeVideos.entity'
 import TypeArticlesEntity from '../entities/typeArticles.entity'
+import PicturesEntity from '../../common/entities/pictures.entity'
 
 @Service()
 export default class PostsService {
@@ -30,6 +30,24 @@ export default class PostsService {
       .getRepository(PostsEntity)
       .createQueryBuilder('posts')
       .where('posts.id > :id',{ id })
+    return query.getOne()
+  }
+
+  public getPreviousPostByIdAfterOrderByPublishedAt(id: number) {
+    const query = datasource
+      .getRepository(PostsEntity)
+      .createQueryBuilder('posts')
+      .where('posts.id < :id',{ id })
+      .orderBy('posts.published_at', 'DESC')
+    return query.getOne()
+  }
+
+  public getNextPostByIdAfterOrderByPublishedAt(id: number) {
+    const query = datasource
+      .getRepository(PostsEntity)
+      .createQueryBuilder('posts')
+      .where('posts.id > :id',{ id })
+      .orderBy('posts.published_at', 'DESC')
     return query.getOne()
   }
 

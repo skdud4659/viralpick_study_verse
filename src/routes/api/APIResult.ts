@@ -5,6 +5,13 @@ export const APIResult = (data: any) => {
   }
 }
 
+export const APIErrorResult = (message: string) => {
+  return {
+    success: false,
+    message
+  }
+}
+
 export class APIError extends Error {
   public code: number
   public status: number = 200

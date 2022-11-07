@@ -1,19 +1,25 @@
 import {Router, Request, Response} from 'express'
 
-import {APIResult} from '../APIResult'
-
 const router = Router()
 
-router.get('/archive', (req: Request, res: Response) => {
-  res.json(APIResult({
-    title: 'archive'
-  }))
+router.get('/posts/list', (req: Request, res: Response) => {
+  return
 })
 
-router.get('/post/:id', (req: Request, res: Response) => {
-  res.json(APIResult({
-    title: 'post'
-  }))
+router.post('/post/create', (req: Request, res: Response) => {
+  return
+})
+
+router.get('/post/:post_id', (req: Request, res: Response) => {
+  return
+})
+
+router.patch('/post/:post_id', (req: Request, res: Response) => {
+  return
+})
+
+router.delete('/post/:post_id', (req: Request, res: Response) => {
+  return
 })
 
 

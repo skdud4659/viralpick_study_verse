@@ -2,6 +2,7 @@ import { Service } from 'typedi'
 import { datasource } from '../../datasource'
 import UserEntity from '../entities/user.entity'
 import { Brackets } from 'typeorm'
+import {passwordHash} from '../../utils/passwordHash'
 
 @Service()
 export default class UserService {
@@ -72,6 +73,23 @@ export default class UserService {
       query.where('users.name like :name', { name: '%${search}%' })
     }
     return query.getCount()
+  }
+
+  public async login(id: string, password: string) {
+    const user = await datasource
+      .getRepository(UserEntity)
+      .createQueryBuilder('users')
+      .where({user_id: id})
+      .getOne()
+
+    if (user === undefined || user === null) {
+      return Promise.reject('No such user_id')
+    }
+    if (user.password === passwordHash(password)) {
+      return Promise.resolve(user)
+    } else {
+      return Promise.reject('Password not match')
+    }
   }
 
   public createUser(

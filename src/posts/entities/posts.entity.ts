@@ -7,12 +7,12 @@ import {
   UpdateDateColumn
 } from 'typeorm'
 import { IsDate, IsOptional, IsString } from 'class-validator'
-import CoreEntity from '../../common/entities/core.entity'
-import PicturesEntity from '../../common/entities/pictures.entity'
 import CityEntity from './city.entity'
 import TypeImagesEntity from './typeImages.entity'
 import TypeVideosEntity from './typeVideos.entity'
 import TypeArticlesEntity from './typeArticles.entity'
+import CoreEntity from '../../common/entities/core.entity'
+import PicturesEntity from '../../common/entities/pictures.entity'
 
 @Entity({ name: 'Posts' })
 export default class PostsEntity extends CoreEntity {
