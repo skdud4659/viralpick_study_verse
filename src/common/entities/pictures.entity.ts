@@ -1,5 +1,5 @@
 import {Column, Entity} from 'typeorm'
-import {IsNumber, IsOptional, IsString} from 'class-validator'
+import {IsString} from 'class-validator'
 import CoreEntity from './core.entity'
 
 @Entity({name: 'Pictures'})
@@ -21,13 +21,17 @@ export default class PicturesEntity extends CoreEntity {
   @IsString()
   mime_type: string
 
-  @Column({type:'int', nullable: true})
-  @IsNumber()
-  @IsOptional()
-  width: number
+  @Column({type:'varchar', nullable: false, default: ''})
+  @IsString()
+  url: string
 
-  @Column({type:'int', nullable: true})
-  @IsNumber()
-  @IsOptional()
-  height: number
+  // @Column({type:'int', nullable: true})
+  // @IsNumber()
+  // @IsOptional()
+  // width: number
+  //
+  // @Column({type:'int', nullable: true})
+  // @IsNumber()
+  // @IsOptional()
+  // height: number
 }

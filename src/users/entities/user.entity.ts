@@ -5,6 +5,10 @@ import {IsNumber, IsOptional, IsString} from 'class-validator'
 @Entity({name: 'Users'})
 export default class UserEntity extends CoreEntity {
   public static STATUS = {
+    ACTIVE: 0,
+    WITHDRAW: 1
+  }
+  public static ROLE = {
     CLIENT: 0,
     OWNER: 1
   }
@@ -30,7 +34,11 @@ export default class UserEntity extends CoreEntity {
   @IsOptional()
   email: string
 
-  @Column({type: 'int', nullable: false, default: UserEntity.STATUS.CLIENT})
+  @Column({type: 'int', nullable: false, default: UserEntity.STATUS.ACTIVE})
   @IsNumber()
   status: number
+
+  @Column({type: 'int', nullable: false, default: UserEntity.ROLE.CLIENT})
+  @IsNumber()
+  role: number
 }

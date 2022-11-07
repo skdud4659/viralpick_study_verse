@@ -17,7 +17,7 @@ export const datasource = new DataSource({
   database: config.DOMAIN_MYSQL_DB,
   username: config.DOMAIN_MYSQL_USER,
   password: config.DOMAIN_MYSQL_PASSWORD,
-  synchronize: true, // true - 동기화 가능.
+  synchronize: false, // true - 동기화 가능.
   logging: true,
   entities: [
     VerseEntity,

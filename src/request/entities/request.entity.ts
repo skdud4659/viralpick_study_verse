@@ -21,6 +21,6 @@ export default class RequestEntity extends CoreEntity {
   company: string
 
   @Column({type: 'longtext', nullable: false})
-  @IsOptional()
+  @IsString()
   message: string
 }
