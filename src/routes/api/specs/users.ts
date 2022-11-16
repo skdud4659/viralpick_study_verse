@@ -3,6 +3,7 @@ import {Container} from 'typedi'
 import {APIErrorResult, APIResult} from '../APIResult'
 import UserService from '../../../users/services/user.service'
 import {numberOrThrow} from '../../../utils/APIUtils'
+import {userCreateResponseBody} from '../../../common/types/response'
 
 const router = Router()
 
@@ -22,7 +23,7 @@ router.get('/users/list', async (req: Request, res: Response) => {
 })
 
 router.post('/user/create', async (req: Request, res: Response) => {
-  const { user_id, password, name, nickname, email } = req.body
+  const { user_id, password, name, nickname, email }: userCreateResponseBody = req.body
   if (user_id === undefined || user_id.trim() === '') {
     return res.status(500).json(APIErrorResult('user_id를 입력하세요.'))
   }
@@ -41,7 +42,7 @@ router.post('/user/create', async (req: Request, res: Response) => {
   }
 })
 
-router.get('user/:user_id', async (req: Request, res: Response) => {
+router.get('/user/:user_id', async (req: Request, res: Response) => {
   const id = numberOrThrow(Number(req.params.user_id))
   const usersService = Container.get(UserService)
   try {
@@ -55,7 +56,7 @@ router.get('user/:user_id', async (req: Request, res: Response) => {
   }
 })
 
-router.delete('user/:user_id', async (req: Request, res: Response) => {
+router.delete('/user/:user_id', async (req: Request, res: Response) => {
   const id = numberOrThrow(Number(req.params.user_id))
   const usersService = Container.get(UserService)
   try {
@@ -67,7 +68,7 @@ router.delete('user/:user_id', async (req: Request, res: Response) => {
   }
 })
 
-router.patch('user/withdraw/:user_id', async (req: Request, res: Response) => {
+router.patch('/user/withdraw/:user_id', async (req: Request, res: Response) => {
   const id = numberOrThrow(Number(req.params.user_id))
   const usersService = Container.get(UserService)
   try {

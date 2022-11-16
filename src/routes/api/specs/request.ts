@@ -3,13 +3,14 @@ import {Container} from 'typedi'
 import {APIErrorResult, APIResult} from '../APIResult'
 import RequestService from '../../../request/services/request.service'
 import {numberOrThrow} from '../../../utils/APIUtils'
+import {requestCreateResponseBody} from '../../../common/types/response'
 
 const router = Router()
 
 const COUNT_PER_PAGE = 20
 
 router.get('/request/list', async (req: Request, res: Response) => {
-  const page = req.query.page !== undefined ? numberOrThrow(req.query.page) : 1
+  const page = req.query.page !== undefined ? numberOrThrow(Number(req.query.page)) : 1
   const offset = page > 1 ? COUNT_PER_PAGE * (page - 1) : 0
   const requestsService = Container.get(RequestService)
   try {
@@ -22,7 +23,7 @@ router.get('/request/list', async (req: Request, res: Response) => {
 })
 
 router.post('/request/new', async (req: Request, res: Response) => {
-  const { name, email, phone, message, company } = req.body
+  const { name, email, phone, message, company }: requestCreateResponseBody = req.body
   if (name === undefined || name.trim() === '') {
     return res.status(500).json(APIErrorResult('이름을 입력해주세요.'))
   }
@@ -56,7 +57,7 @@ router.get('/request/:request_id', async (req: Request, res: Response) => {
     return res.status(500).json(APIErrorResult(error.message))
   }
 })
-router.delete('/request/:request_is', async (req: Request, res: Response) => {
+router.delete('/request/:request_id', async (req: Request, res: Response) => {
   const id = numberOrThrow(Number(req.params.request_id))
   const requestsService = Container.get(RequestService)
   try {

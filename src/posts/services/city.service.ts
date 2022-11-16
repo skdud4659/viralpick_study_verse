@@ -31,7 +31,7 @@ export default class CityService {
     return query.getOne()
   }
 
-  public getCityByName(name: number) {
+  public getCityByName(name: string) {
     const query = datasource
       .getRepository(CityEntity)
       .createQueryBuilder('city')
@@ -44,6 +44,7 @@ export default class CityService {
     const query = datasource
       .getRepository(CityEntity)
       .createQueryBuilder('city')
+      .select(['city.id', 'city.name'])
       .orderBy('city.id', 'DESC')
     if (
       offset !== undefined &&
@@ -69,7 +70,7 @@ export default class CityService {
     return city.save()
   }
 
-  public updateCity(id: string, name: string) {
+  public updateCity(id: number, name: string) {
     return datasource.getRepository(CityEntity).update(id, {
       name
     })
