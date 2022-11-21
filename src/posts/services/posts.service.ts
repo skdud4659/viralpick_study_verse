@@ -13,6 +13,36 @@ export default class PostsService {
     const query = datasource
       .getRepository(PostsEntity)
       .createQueryBuilder('posts')
+      .leftJoinAndSelect('posts.thumbnail', 'thumbnail')
+      .leftJoinAndSelect('posts.city', 'city')
+      .leftJoinAndSelect('posts.image_content', 'image_content')
+      .leftJoinAndSelect('posts.video_content', 'video_content')
+      .leftJoinAndSelect('posts.article_content', 'article_content')
+      .select([
+        'posts.id',
+        'posts.type',
+        'posts.title',
+        'posts.published_date',
+        'posts.status',
+        'thumbnail.id',
+        'thumbnail.url',
+        'city.id',
+        'city.name',
+        'image_content.id',
+        'image_content.title',
+        'image_content.description',
+        'image_content.image',
+        'video_content.id',
+        'video_content.video_id',
+        'video_content.title',
+        'video_content.description',
+        'video_content.poster',
+        'article_content.id',
+        'article_content.title',
+        'article_content.overview',
+        'article_content.contents',
+        'article_content.cover'
+      ])
       .where({ id })
     return query.getOne()
   }
