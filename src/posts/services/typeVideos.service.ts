@@ -10,12 +10,12 @@ export default class TypeVideosService {
       .getRepository(TypeVideosEntity)
       .createQueryBuilder('type_videos')
       .leftJoinAndSelect('type_videos.poster', 'poster')
-      .select([
-        'type_videos.title',
-        'type_videos.description',
-        'poster.id',
-        'poster.url'
-      ])
+      // .select([
+      //   'type_videos.title',
+      //   'type_videos.description',
+      //   'poster.id',
+      //   'poster.url'
+      // ])
       .where({ id })
     return query.getOne()
   }

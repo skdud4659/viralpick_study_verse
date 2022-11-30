@@ -1,4 +1,3 @@
-import {Moment} from 'moment'
 
 export type userCreateResponseBody = {
   user_id: string
@@ -21,6 +20,7 @@ export type requestCreateResponseBody = {
 }
 
 export type contentBaseType = {
+  id: any
   title: string
   description: string
 }
@@ -32,6 +32,7 @@ export type videoContentType = contentBaseType & {
   poster?: number
 }
 export type articleContentType = {
+  id: any
   cover: number
   title: string
   overview: string
@@ -45,6 +46,6 @@ export type postCreateResponseBody = {
   image_content?: imageContentType | null
   video_content?: videoContentType | null
   article_content?: articleContentType | null
-  published_at: Moment
+  published_at: Date
   status: string
 }

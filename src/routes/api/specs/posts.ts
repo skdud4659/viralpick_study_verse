@@ -2,7 +2,7 @@ import {Router, Request, Response} from 'express'
 import moment from 'moment'
 import {Container} from 'typedi'
 import {APIErrorResult, APIResult} from '../APIResult'
-// import UserEntity from '../../../users/entities/user.entity'
+import UserEntity from '../../../users/entities/user.entity'
 import PostsEntity from '../../../posts/entities/posts.entity'
 import PostsService from '../../../posts/services/posts.service'
 import CityService from '../../../posts/services/city.service'
@@ -10,7 +10,6 @@ import TypeImagesService from '../../../posts/services/typeImages.service'
 import TypeVideosService from '../../../posts/services/typeVideos.service'
 import TypeArticlesService from '../../../posts/services/typeArticles.service'
 import PicturesService from '../../../common/services/pictures.service'
-import {postCreateResponseBody} from '../../../common/types/response'
 import {numberOrThrow} from '../../../utils/APIUtils'
 
 const router = Router()
@@ -24,12 +23,12 @@ enum CONTENT_TYPE {
 router.get('/posts/list', async (req: Request, res: Response) => {
   const page = req.query.page !== undefined ? numberOrThrow(Number(req.query.page)) : 1
   const offset = page > 1 ? COUNT_PER_PAGE * (page - 1) : 0
-  // const status = req.query.role !== undefined && Number(req.query.role) === UserEntity.ROLE.OWNER
-  //   ? [PostsEntity.STATUS.PUBLIC, PostsEntity.STATUS.PRIVATE]
-  //   : [PostsEntity.STATUS.PUBLIC]
+  const status = req.query.role !== undefined && Number(req.query.role) === UserEntity.ROLE.OWNER
+    ? [PostsEntity.STATUS.PUBLIC, PostsEntity.STATUS.PRIVATE]
+    : [PostsEntity.STATUS.PUBLIC]
   const postsService = Container.get(PostsService)
   try {
-    const posts: PostsEntity[] = await postsService.getPostsList(undefined, offset, COUNT_PER_PAGE)
+    const posts: PostsEntity[] = await postsService.getPostsList(undefined, offset, COUNT_PER_PAGE, status)
     const total = await postsService.getPostsCount()
     return res.json(APIResult({ posts, total, page }))
   } catch (error) {
@@ -58,7 +57,7 @@ router.post('/post/create', async (req: Request, res: Response) => {
     video_content,
     article_content
     // setPostData : 데이터 필요에 맞게 가공
-  } = await setPostData(req.body)
+  } = await setPostsData(req.body)
   // 유효성 검사
   if (type === undefined) {
     return res.status(500).json(APIErrorResult('타입을 입력해주세요.'))
@@ -124,12 +123,12 @@ router.post('/post/create', async (req: Request, res: Response) => {
 
 router.get('/post/:post_id', async (req: Request, res: Response) => {
   const post_id = numberOrThrow(Number(req.params.post_id))
-  // const status = req.query.role !== undefined && Number(req.query.role) === UserEntity.ROLE.OWNER
-  //   ? [PostsEntity.STATUS.PUBLIC, PostsEntity.STATUS.PRIVATE]
-  //   : [PostsEntity.STATUS.PUBLIC]
+  const status = req.query.role !== undefined && Number(req.query.role) === UserEntity.ROLE.OWNER
+    ? [PostsEntity.STATUS.PUBLIC, PostsEntity.STATUS.PRIVATE]
+    : [PostsEntity.STATUS.PUBLIC]
   const postService = Container.get(PostsService)
   try {
-    const post = await postService.getPostById(post_id)
+    const post = await postService.getPostById(post_id, status)
     if (post !== undefined && post !== null) {
       if (post.article_content !== null) {
         const picturesService = Container.get(PicturesService)
@@ -154,7 +153,127 @@ router.get('/post/:post_id', async (req: Request, res: Response) => {
   }
 })
 
-router.patch('/post/:post_id', (req: Request, res: Response) => {
+router.patch('/post/:post_id', async (req: Request, res: Response) => {
+  const id = numberOrThrow(Number(req.params.post_id))
+  const {
+    type,
+    thumbnail,
+    title,
+    city,
+    image_content,
+    video_content,
+    article_content,
+    status,
+    published_at
+  } = await setPostsData(req.body)
+  if (type === undefined) {
+    return res.status(500).json(APIErrorResult('타입을 입력해주세요.'))
+  }
+  if (thumbnail === undefined || thumbnail === null) {
+    return res.status(500).json(APIErrorResult('썸네일을 입력해주세요.'))
+  }
+  if (title === undefined || title.trim() === '') {
+    return res.status(500).json(APIErrorResult('제목을 입력해주세요.'))
+  }
+  if (city === undefined || city === null) {
+    return res.status(500).json(APIErrorResult('도시를 입력해주세요.'))
+  }
+  if (status === undefined) {
+    return res.status(500).json(APIErrorResult('게시글 상태를 선택해주세요.'))
+  }
+  if (type === PostsEntity.TYPE.IMAGE && (image_content === undefined || image_content === null)) {
+    return res.status(500).json(APIErrorResult('이미지를 선택해주세요.'))
+  }
+  if (type === PostsEntity.TYPE.VIDEO && (video_content === undefined || video_content === null)) {
+    return res.status(500).json(APIErrorResult('비디오를 선택해주세요.'))
+  }
+  if (type === PostsEntity.TYPE.ARTICLE && (article_content === undefined || article_content === null)) {
+    return res.status(500).json(APIErrorResult('아티클을 선택해주세요.'))
+  }
+
+  const postsService = Container.get(PostsService)
+  try {
+    let _image_content = null
+    let _video_content = null
+    let _article_content = null
+    if (type === PostsEntity.TYPE.IMAGE) {
+      const { id: content_id, image, title, description } = image_content
+      // Type_images 1개 항목을 생성함
+      const typeImagesService = Container.get(TypeImagesService)
+      if (content_id !== null) {
+        await typeImagesService.updateTypeImage(
+          content_id,
+          image,
+          title,
+          description
+        )
+        _image_content = await typeImagesService.getTypeImageById(content_id)
+      } else {
+        _image_content = await typeImagesService.createTypeImage(
+          image,
+          title,
+          description
+        )
+      }
+    }
+    if (type === PostsEntity.TYPE.VIDEO) {
+      const { id: content_id, poster, title, description } = video_content
+      // Type_videos 1개 항목을 생성함
+      const typeVideosService = Container.get(TypeVideosService)
+      if (content_id !== null) {
+        await typeVideosService.updateTypeVideo(
+          content_id,
+          poster,
+          title,
+          description
+        )
+        _video_content = await typeVideosService.getTypeVideoById(content_id)
+      } else {
+        _video_content = await typeVideosService.createTypeVideo(
+          poster,
+          title,
+          description
+        )
+      }
+    }
+    if (type === PostsEntity.TYPE.ARTICLE) {
+      const { id: content_id, cover, title, overview, content } = article_content
+      // Type_articles 1개 항목을 생성함
+      const typeArticlesService = Container.get(TypeArticlesService)
+      if (content_id !== null) {
+        await typeArticlesService.updateTypeArticles(
+          content_id,
+          cover,
+          title,
+          overview,
+          content
+        )
+        _article_content = await typeArticlesService.getTypeArticleById(content_id)
+      } else {
+        _article_content = await typeArticlesService.createTypeArticles(
+          cover,
+          title,
+          overview,
+          content
+        )
+      }
+    }
+    await postsService.updatePost(
+      id,
+      type,
+      thumbnail,
+      title,
+      city,
+      _image_content,
+      _video_content,
+      _article_content,
+      published_at,
+      status
+    )
+    res.json(APIResult({ result: true }))
+  } catch (error) {
+    return res.status(500).json(APIErrorResult(error.message))
+  }
   return
 })
 
@@ -167,78 +286,74 @@ router.delete('/post/:post_id', async (req: Request, res: Response) => {
   } catch (error) {
     return res.status(500).json(APIErrorResult(error.message))
   }
-  return
 })
 
 
 export default router
 
-const setPostData = async (body: postCreateResponseBody) => {
+const setPostsData = async (body: any) => {
   const {
     type = PostsEntity.TYPE.IMAGE,
     thumbnail: thumbnail_id,
     title,
-    city : city_id,
+    city: city_id,
     image_content: image_content_data = null,
     video_content: video_content_data = null,
     article_content: article_content_data = null,
-    published_at = moment(),
+    published_at: published_at_unix = moment(),
     status = PostsEntity.STATUS.PRIVATE
   } = body
   const picturesService = Container.get(PicturesService)
   const thumbnail = await picturesService.getPictureById(thumbnail_id)
-
   const cityService = Container.get(CityService)
   const city = await cityService.getCityById(city_id)
-
   let image_content = null
   let video_content = null
   let article_content = null
-
   if (image_content_data !== null) {
-    const { image: image_id, title, description } = image_content_data
-    const image = await picturesService.getPictureById(image_id)
+    const image = await picturesService.getPictureById(image_content_data.image)
     image_content = {
-      id: null,
-      title,
-      description,
-      image
+      id: image_content_data.id || null,
+      image,
+      title: image_content_data.title,
+      description: image_content_data.description
     }
   }
-
   if (video_content_data !== null) {
-    const { video_id, poster: poster_id, title, description } = video_content_data
-    const poster = await picturesService.getPictureById(poster_id)
+    const poster = await picturesService.getPictureById(
+      video_content_data.poster
+    )
     video_content = {
-      id: null,
-      video_id,
+      id: video_content_data.id || null,
+      video_id: video_content_data.video_id,
       poster,
-      title,
-      description
+      title: video_content_data.title,
+      description: video_content_data.description
     }
   }
-
   if (article_content_data !== null) {
-    const { cover: cover_id, title, overview, contents } = article_content_data
-    const cover = await picturesService.getPictureById(cover_id)
+    const cover = await picturesService.getPictureById(
+      article_content_data.cover
+    )
+    console.log(article_content_data)
     article_content = {
-      id: null,
+      id: article_content_data.id || null,
       cover,
-      title,
-      overview,
-      contents
+      title: article_content_data.title,
+      overview: article_content_data.overview,
+      content: article_content_data.content
     }
   }
-
+  const published_at = moment(published_at_unix).toDate()
   return {
     type,
-    title,
     thumbnail,
+    title,
     city,
     image_content,
     video_content,
     article_content,
-    published_at: published_at.toDate(),
+    published_at,
     status
   }
 }

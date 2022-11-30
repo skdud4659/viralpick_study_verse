@@ -10,12 +10,12 @@ export default class TypeImagesService {
       .getRepository(TypeImagesEntity)
       .createQueryBuilder('type_images')
       .leftJoinAndSelect('type_images.image', 'image')
-      .select([
-        'type_images.title',
-        'type_images.description',
-        'image.id',
-        'image.url'
-      ])
+      // .select([
+      //   'type_images.title',
+      //   'type_images.description',
+      //   'image.id',
+      //   'image.url'
+      // ])
       .where({ id })
     return query.getOne()
   }

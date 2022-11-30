@@ -9,15 +9,19 @@ import PicturesEntity from '../../common/entities/pictures.entity'
 
 @Service()
 export default class PostsService {
-  public getPostById(id: number) {
+  public getPostById(id: number, status = [PostsEntity.STATUS.PUBLIC]) {
     const query = datasource
       .getRepository(PostsEntity)
       .createQueryBuilder('posts')
       .leftJoinAndSelect('posts.thumbnail', 'thumbnail')
       .leftJoinAndSelect('posts.city', 'city')
       .leftJoinAndSelect('posts.image_content', 'image_content')
+      .leftJoinAndSelect('image_content.image', 'image_content.image')
       .leftJoinAndSelect('posts.video_content', 'video_content')
+      .leftJoinAndSelect('video_content.poster', 'video_content.poster')
       .leftJoinAndSelect('posts.article_content', 'article_content')
+      .leftJoinAndSelect('article_content.cover', 'article_content.cover')
+
       .select([
         'posts.id',
         'posts.type',
@@ -44,6 +48,7 @@ export default class PostsService {
         'article_content.cover'
       ])
       .where({ id })
+      .andWhere('posts.status IN(:status)', { status })
     return query.getOne()
   }
 
@@ -81,13 +86,14 @@ export default class PostsService {
     return query.getOne()
   }
 
-  public getPostsList(search?: string, offset?: number, limit?: number) {
+  public getPostsList(search?: string, offset?: number, limit?: number, status = [PostsEntity.STATUS.PUBLIC]) {
     const query = datasource
       .getRepository(PostsEntity)
       .createQueryBuilder('posts')
       .orderBy('posts.id', 'DESC')
+      .where('posts.status IN(:status)', { status })
     if (search !== undefined) {
-      query.where('posts.title like :title', { name: `%${search}%` })
+      query.andWhere('posts.title like :title', { name: `%${search}%` })
     }
     if (
       offset !== undefined &&

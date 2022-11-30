@@ -10,13 +10,13 @@ export default class TypeArticlesService {
       .getRepository(TypeArticlesEntity)
       .createQueryBuilder('type_articles')
       .leftJoinAndSelect('type_articles.cover', 'cover')
-      .select([
-        'type_articles.title',
-        'type_articles.overview',
-        'type_articles.contents',
-        'cover.id',
-        'cover.url'
-      ])
+      // .select([
+      //   'type_articles.title',
+      //   'type_articles.overview',
+      //   'type_articles.contents',
+      //   'cover.id',
+      //   'cover.url'
+      // ])
       .where({ id })
     return query.getOne()
   }
