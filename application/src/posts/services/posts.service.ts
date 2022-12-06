@@ -35,54 +35,61 @@ export default class PostsService {
         'image_content.id',
         'image_content.title',
         'image_content.description',
-        'image_content.image',
+        'image_content.image.id',
+        'image_content.image.url',
         'video_content.id',
         'video_content.video_id',
         'video_content.title',
         'video_content.description',
-        'video_content.poster',
+        'video_content.poster.id',
+        'video_content.poster.url',
         'article_content.id',
         'article_content.title',
         'article_content.overview',
         'article_content.contents',
-        'article_content.cover'
+        'article_content.cover.id',
+        'article_content.cover.url'
       ])
       .where({ id })
       .andWhere('posts.status IN(:status)', { status })
     return query.getOne()
   }
 
-  public getPreviousPostById(id: number) {
+  public getPreviousPostById(id: number, status = [PostsEntity.STATUS.PUBLIC]) {
     const query = datasource
       .getRepository(PostsEntity)
       .createQueryBuilder('posts')
       .where('posts.id < :id',{ id })
+      .andWhere('posts.status IN(:status)', { status })
     return query.getOne()
   }
 
-  public getNextPostById(id: number) {
+  public getNextPostById(id: number, status = [PostsEntity.STATUS.PUBLIC]) {
     const query = datasource
       .getRepository(PostsEntity)
       .createQueryBuilder('posts')
       .where('posts.id > :id',{ id })
+      .andWhere('posts.status IN(:status)', { status })
     return query.getOne()
   }
 
-  public getPreviousPostByIdAfterOrderByPublishedAt(id: number) {
+  public getPreviousPostByIdAfterOrderByPublishedAt(id: number, status = [PostsEntity.STATUS.PUBLIC]) {
     const query = datasource
       .getRepository(PostsEntity)
       .createQueryBuilder('posts')
       .where('posts.id < :id',{ id })
-      .orderBy('posts.published_at', 'DESC')
+      .andWhere('posts.status IN(:status)', { status })
+      .orderBy('posts.published_date', 'DESC')
     return query.getOne()
   }
 
-  public getNextPostByIdAfterOrderByPublishedAt(id: number) {
+  public getNextPostByIdAfterOrderByPublishedAt(id: number, status = [PostsEntity.STATUS.PUBLIC]) {
     const query = datasource
       .getRepository(PostsEntity)
       .createQueryBuilder('posts')
       .where('posts.id > :id',{ id })
-      .orderBy('posts.published_at', 'DESC')
+      .andWhere('posts.status IN(:status)', { status })
+      .orderBy('posts.published_date', 'DESC')
     return query.getOne()
   }
 
@@ -91,6 +98,7 @@ export default class PostsService {
       .getRepository(PostsEntity)
       .createQueryBuilder('posts')
       .orderBy('posts.id', 'DESC')
+      .orderBy('posts.published_date', 'DESC')
       .where('posts.status IN(:status)', { status })
     if (search !== undefined) {
       query.andWhere('posts.title like :title', { name: `%${search}%` })
@@ -109,8 +117,15 @@ export default class PostsService {
     return query.getMany()
   }
 
-  public getPostsCount() {
-    return datasource.getRepository(PostsEntity).count()
+  public getPostsCount(search?: string, status = [PostsEntity.STATUS.PUBLIC]) {
+    const query = datasource
+      .getRepository(PostsEntity)
+      .createQueryBuilder('posts')
+      .where('posts.status IN(:status)', { status })
+    if (search !== undefined) {
+      query.andWhere('posts.title like :title', { title: `%${search}%` })
+    }
+    return query.getCount()
   }
 
   public createPost(

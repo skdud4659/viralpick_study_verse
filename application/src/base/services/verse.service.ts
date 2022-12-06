@@ -1,6 +1,6 @@
 import { Service } from 'typedi'
 import { datasource } from '../../datasource'
-import VerseEntity from '../../base/entities/verse.entity'
+import VerseEntity from '../entities/verse.entity'
 
 @Service()
 export default class VerseService {

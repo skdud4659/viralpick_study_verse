@@ -15,6 +15,7 @@ import {numberOrThrow} from '../../../utils/APIUtils'
 const router = Router()
 
 const COUNT_PER_PAGE = 20
+
 enum CONTENT_TYPE {
   PARAGRAPH = 'paragraph',
   FIGURE = 'figure'
@@ -29,7 +30,7 @@ router.get('/posts/list', async (req: Request, res: Response) => {
   const postsService = Container.get(PostsService)
   try {
     const posts: PostsEntity[] = await postsService.getPostsList(undefined, offset, COUNT_PER_PAGE, status)
-    const total = await postsService.getPostsCount()
+    const total = await postsService.getPostsCount(undefined, status)
     return res.json(APIResult({ posts, total, page }))
   } catch (error) {
     return res.status(500).json(APIErrorResult(error.message))
@@ -129,8 +130,18 @@ router.get('/post/:post_id', async (req: Request, res: Response) => {
   const postService = Container.get(PostsService)
   try {
     const post = await postService.getPostById(post_id, status)
+    const previousPost = await postService.getPreviousPostByIdAfterOrderByPublishedAt(post_id, status)
+    const nextPost = await postService.getNextPostByIdAfterOrderByPublishedAt(post_id, status)
+    const pagination = {
+      previous: previousPost,
+      next: nextPost
+    }
     if (post !== undefined && post !== null) {
-      if (post.article_content !== null) {
+      if (
+        post.type === PostsEntity.TYPE.ARTICLE &&
+        post.article_content !== null &&
+        post.article_content !== undefined
+      ) {
         const picturesService = Container.get(PicturesService)
         post.article_content.contents = await Promise.all(
           post.article_content.contents.map(async (item) => {
@@ -146,7 +157,9 @@ router.get('/post/:post_id', async (req: Request, res: Response) => {
           })
         )
       }
-      return res.json(APIResult({ post }))
+      return res.json(APIResult({ post, pagination }))
+    } else {
+      return res.status(500).json(APIErrorResult('페이지를 찾을 수 없습니다.'))
     }
   } catch (error) {
     return res.status(500).json(APIErrorResult(error.message))
@@ -300,7 +313,7 @@ const setPostsData = async (body: any) => {
     image_content: image_content_data = null,
     video_content: video_content_data = null,
     article_content: article_content_data = null,
-    published_at: published_at_unix = moment(),
+    published_at: published_at_unix = moment().unix(),
     status = PostsEntity.STATUS.PRIVATE
   } = body
   const picturesService = Container.get(PicturesService)
@@ -344,7 +357,7 @@ const setPostsData = async (body: any) => {
       content: article_content_data.content
     }
   }
-  const published_at = moment(published_at_unix).toDate()
+  const published_at = moment.unix(published_at_unix).toDate()
   return {
     type,
     thumbnail,

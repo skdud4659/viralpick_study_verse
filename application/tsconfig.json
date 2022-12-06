@@ -5,7 +5,7 @@
     // root 경로
     "baseUrl": "./",
     // build 경로
-    "outDir": "./build",
+    "outDir": "../build",
     "module": "commonjs",
     "target": "esnext",
     "declaration": true,
