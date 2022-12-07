@@ -138,3 +138,79 @@ span, ul li {
   -moz-transform: translateX(100px) translateX(100px) scale(2.0) rotate(45deg);
   -o-transform: translateX(100px) translateX(100px) scale(2.0) rotate(45deg)
 }
+
+.transition{
+  /*
+    property(속성): default all,
+    duration(진행 시간): s, ms로 표현 2s === 2000ms,
+    timing-function(가속도): default linear(가속도가 없는 상태) + step: 거의 안씀, cubic-bezier(1,1,1,1)
+      ** cubic-bezier(1,1,1,1), cubic-bezier(0.535, -0.425, 0.950, 1.650) >> 가속도값 좌표
+        https://matthewlein.com/tools/ceaser
+    delay(지연 시간): s, ms로 표현
+   */
+  transition: width 500ms ease-in-out, color 200ms ease-in 300ms;
+  /* Cross Browsing */
+  -webkit-transition: width 500ms ease-in-out, color 200ms ease-in 300ms;
+  -moz-transform: width 500ms ease-in-out, color 200ms ease-in 300ms;
+  -o-transform: width 500ms ease-in-out, color 200ms ease-in 300ms;
+
+  transition-property: width;
+  transition-duration: 300ms;
+  transition-timing-function: ease-in-out;
+  transition-delay: 100ms;
+
+  /* transform */
+  /* transition: transform 400ms ease-in-out */
+  /* -webkit-transition: -webkit-transform 400ms ease-in-out */
+  /* -moz-transform: -moz-transform 400ms ease-in-out */
+  /* -o-transform: -o-transform 400ms ease-in-out */
+}
+
+.animation{
+  /*
+    name. duration, timing-function, delay, iteration-count(반복), direction
+  */
+  animation: animationA 5000ms ease-in-out 500ms infinite alternate;
+  -webkit-animation: animationA 5000ms ease-in-out 500ms infinite alternate;
+}
+@keyframes animationA {
+  /* 0% or from */
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 0.25;
+  }
+
+  /* 100% or to */
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+@-webkit-keyframes animationA {
+  0% {
+    -webkit-transform: translateX(100%);
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 0.25;
+  }
+
+  100% {
+    -webkit-transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes animationB {
+  from {
+    color: #000000;
+  }
+  to {
+    color: #ffffff;
+  }
+}
