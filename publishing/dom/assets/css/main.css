@@ -8,7 +8,7 @@
 }
 
 /* -- Layout -- */
-h1.visually-hidden {
+.visually-hidden {
   display: none;
   visibility: hidden;
   width: 0;
@@ -121,6 +121,8 @@ main#main .content-wrap section .section-content{
   height:100%;
   margin-right: auto;
   margin-left: auto;
+  padding-top:50px;
+  padding-bottom:50px;
   color:#ffffff;
 }
 main#main .content-wrap section .section-content h2.headline{
@@ -209,16 +211,31 @@ main#main .content-wrap section#section-3{
 }
 
 /* -- Footer -- */
-footer{
-  display: flex;
-  flex-direction: column;
+footer#global-footer{
   width:100%;
   height:var(--gf-height);
-  align-items: center;
-  justify-content: center;
+  text-align: center;
+  box-sizing: border-box;
+  /* --
+    border-box : height 내에 포함
+    content-box : height 외에 포함
+  -- */
 }
-footer .gf-footer{
-  margin-top:10px;
+footer#global-footer h2.gf-label{
+  font-weight: 600;
+
+}
+footer#global-footer .gf-footer .gf-content{
+  padding-top:60px;
+  padding-bottom:80px;
+}
+footer#global-footer .gf-footer .gf-content p.gf-copyright{
+  font-size: 13px;
+  line-height: 20px;
+
+}
+footer#global-footer .gf-footer .gf-content p.gf-copyright a{
+  color: var(--main-color)
 }
 
 div#viewport{
