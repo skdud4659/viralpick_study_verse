@@ -40,6 +40,7 @@ const APP = {
   reset() {
     // dispatch > 이벤트 add 후 유저의 행위없이도 시스템에서 강제로 실행
     window.dispatchEvent(new Event('resize'))
+    window.dispatchEvent(new Event('scroll'))
   },
   handleClickNavEl() {
     console.log('navigation')
