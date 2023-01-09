@@ -17,7 +17,6 @@
 // console.log(number);
 
 const APP = {
-  _isOpen: false,
   init() {
     this.layout()
     this.addEvent()
@@ -39,7 +38,8 @@ const APP = {
     window.removeEventListener('scroll')
   },
   reset() {
-    this._isOpen = false
+    // dispatch > 이벤트 add 후 유저의 행위없이도 시스템에서 강제로 실행
+    window.dispatchEvent(new Event('resize'))
   },
   handleClickNavEl() {
     console.log('navigation')
