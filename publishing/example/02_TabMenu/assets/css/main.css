@@ -1,0 +1,116 @@
+p.font {
+  position:relative;
+  padding:20px;
+  font-size: 20px;
+  line-height: 26px
+}
+p.font + p.font::before{
+  content: '';
+  position: absolute;
+  top:0;
+  right:20px;
+  left:20px;
+  border-bottom: 1px solid var(--color-default)
+}
+/*p.font::after{*/
+/*  content: 'after ';*/
+
+/*}*/
+p.font.font-1{
+  font-family: 'Noto Sans KR', AppleSDGothicNeo, 'Malgun Gothic', '맑은 고딕', Roboto, 'Helvetica Neue', '애플 SD 산돌고딕 Neo', dotum, gulim, Helvetica, Arial, sans-serif;
+  font-weight: 500
+}
+p.font.font-2{
+  font-family: 'Pretendard', AppleSDGothicNeo, 'Malgun Gothic', '맑은 고딕', Roboto, 'Helvetica Neue', '애플 SD 산돌고딕 Neo', dotum, gulim, Helvetica, Arial, sans-serif;
+  font-weight: 500
+}
+p.font.font-3{
+  font-family: 'Futura', AppleSDGothicNeo, 'Malgun Gothic', '맑은 고딕', Roboto, 'Helvetica Neue', '애플 SD 산돌고딕 Neo', dotum, gulim, Helvetica, Arial, sans-serif;
+  font-weight: 600
+}
+
+#tab.tab{
+  max-width: 800px;
+  margin:40px auto 60px;
+  font-family: 'Futura', AppleSDGothicNeo, 'Malgun Gothic', '맑은 고딕', Roboto, 'Helvetica Neue', '애플 SD 산돌고딕 Neo', dotum, gulim, Helvetica, Arial, sans-serif
+}
+#tab-menu.tab-menu ul{
+  display: flex;
+  margin-right:-10px;
+  margin-left:-10px
+}
+#tab-menu.tab-menu li{
+  flex:1;
+  padding-right:10px;
+  padding-left:10px;
+  text-align: center
+}
+#tab-menu.tab-menu li + li{
+  position: relative
+}
+#tab-menu.tab-menu li + li::before{
+  content: '';
+  position:absolute;
+  top:5px;
+  bottom:5px;
+  left:0;
+  border-left: 1px solid var(--color-default)
+}
+#tab-menu.tab-menu li a{
+  display: block;
+  padding: 12px 20px;
+  background: var(--color-gray);
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 20px
+}
+#tab-menu.tab-menu li a.selected{
+  background: var(--color-dark);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  font-weight: 600;
+  color: var(--color-white)
+}
+#tab-menu.tab-menu li a span{
+  display: inline-block;
+  vertical-align: top
+}
+#tab #tab-content.tab-contents{
+  position:relative;
+  height:500px;
+  margin-top:60px;
+  padding-top: 5px
+}
+#tab #tab-content.tab-contents::before,
+#tab #tab-content.tab-contents::after{
+  content:'';
+  position:absolute;
+  right:0;
+  left:0;
+  border-bottom: 1px solid var(--color-default)
+}
+#tab #tab-content.tab-contents::before{
+  top:0
+}
+#tab #tab-content.tab-contents::after{
+  top:3px
+}
+#tab #tab-content.tab-contents .tab-content{
+  position: absolute;
+  top:0;
+  right:0;
+  left:0;
+  height:100%;
+  opacity: 0;
+  pointer-events: none;
+}
+#tab #tab-content.tab-contents .tab-content.selected{
+  position:relative;
+  opacity:1;
+  pointer-events: auto;
+}
+#tab #tab-content.tab-contents .tab-content .tab-content-wrap{
+  padding:40px 20px
+}
+
+
+

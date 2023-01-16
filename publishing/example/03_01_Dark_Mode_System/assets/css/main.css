@@ -1,0 +1,30 @@
+.section{
+  display: flex;
+  width:100vw;
+  height:100vh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap:20px
+}
+.section h1.headline{
+  font-size: 2rem;
+  line-height: 3rem
+}
+.section p.copy{
+  font-size: 1.5rem;
+  line-height: 2rem
+}
+
+@media (prefers-color-scheme: light) {
+  html, body{
+    background: var(--color-white);
+    color: var(--color-dark)
+  }
+}
+@media (prefers-color-scheme: dark) {
+  html, body{
+    background: var(--color-dark);
+    color: var(--color-white)
+  }
+}

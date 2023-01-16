@@ -1,0 +1,95 @@
+.section{
+  display: flex;
+  width:100vw;
+  height:100vh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap:20px;
+  transition: background 180ms ease-in-out;
+  -moz-transition: background 180ms ease-in-out;
+  -webkit-transition: background 180ms ease-in-out;
+  -o-transition: background 180ms ease-in-out;
+}
+.section h1.headline{
+  font-size: 2rem;
+  line-height: 3rem
+}
+.section p.copy{
+  font-size: 1.5rem;
+  line-height: 2rem
+}
+
+input#mode {
+  visibility: hidden;
+  position:absolute;
+  top:0;
+  left:0;
+  width:0;
+  height:0;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  pointer-events: none;
+  clip: rect(0 0 0 0)
+}
+input#mode:checked ~ section.section {
+  background: var(--color-dark);
+  color:var(--color-white);
+}
+input#mode:checked ~ #controls label#btn-switch {
+  background: var(--color-white);
+}
+input#mode:checked ~ #controls label#btn-switch span {
+  left:11px;
+  background: var(--color-dark);
+  transition: left 180ms ease-in-out, background 180ms ease-in-out;
+  -moz-transition: left 180ms ease-in-out, background 180ms ease-in-out;
+  -webkit-transition: left 180ms ease-in-out, background 180ms ease-in-out;
+  -o-transition: left 180ms ease-in-out, background 180ms ease-in-out;
+}
+#controls{
+  position:absolute;
+  top:20px;
+  right:40px
+}
+
+#controls label#btn-switch{
+  overflow: hidden;
+  display: block;
+  width:24px;
+  height:16px;
+  background: var(--color-dark);
+  border-radius: 8px;
+  line-height:16px;
+  text-indent: -9999px;
+  cursor: pointer;
+}
+#controls label#btn-switch span{
+  display: block;
+  position: absolute;
+  top:3px;
+  left:3px;
+  width:10px;
+  height:10px;
+  background: var(--color-white);
+  border-radius: 50%;
+  transition: background 180ms ease-in-out;
+  -moz-transition: background 180ms ease-in-out;
+  -webkit-transition: background 180ms ease-in-out;
+  -o-transition: background 180ms ease-in-out;
+}
+#controls label#btn-switch:after{}
+
+/*@media (prefers-color-scheme: light) {*/
+/*  html, body{*/
+/*    background: var(--color-white);*/
+/*    color: var(--color-dark)*/
+/*  }*/
+/*}*/
+/*@media (prefers-color-scheme: dark) {*/
+/*  html, body{*/
+/*    background: var(--color-dark);*/
+/*    color: var(--color-white)*/
+/*  }*/
+/*}*/
