@@ -12,8 +12,13 @@
   -o-transition: background 180ms ease-in-out;
 }
 .section h1.headline{
+  position:relative;
   font-size: 2rem;
-  line-height: 3rem
+  line-height: 3rem;
+  text-transform: uppercase;
+}
+.section h1.headline:before{
+  content:'Light';
 }
 .section p.copy{
   font-size: 1.5rem;
@@ -36,6 +41,9 @@ input#mode {
 input#mode:checked ~ section.section {
   background: var(--color-dark);
   color:var(--color-white);
+}
+input#mode:checked ~ section.section h1.headline:before{
+  content: 'Dark';
 }
 input#mode:checked ~ #controls label#btn-switch {
   background: var(--color-white);
@@ -80,16 +88,3 @@ input#mode:checked ~ #controls label#btn-switch span {
   -o-transition: background 180ms ease-in-out;
 }
 #controls label#btn-switch:after{}
-
-/*@media (prefers-color-scheme: light) {*/
-/*  html, body{*/
-/*    background: var(--color-white);*/
-/*    color: var(--color-dark)*/
-/*  }*/
-/*}*/
-/*@media (prefers-color-scheme: dark) {*/
-/*  html, body{*/
-/*    background: var(--color-dark);*/
-/*    color: var(--color-white)*/
-/*  }*/
-/*}*/

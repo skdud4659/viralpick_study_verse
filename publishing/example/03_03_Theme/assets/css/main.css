@@ -1,14 +1,109 @@
-p.font.font-1{
-  font-family: 'Noto Sans KR', AppleSDGothicNeo, 'Malgun Gothic', '맑은 고딕', Roboto, 'Helvetica Neue', '애플 SD 산돌고딕 Neo', dotum, gulim, Helvetica, Arial, sans-serif;
-  font-weight: 500
+html.mode-light section.section{
+  background: var(--color-light);
 }
-p.font.font-2{
-  font-family: 'Pretendard', AppleSDGothicNeo, 'Malgun Gothic', '맑은 고딕', Roboto, 'Helvetica Neue', '애플 SD 산돌고딕 Neo', dotum, gulim, Helvetica, Arial, sans-serif;
-  font-weight: 500
+html.mode-dark section.section{
+  background: var(--color-dark);
+  color:var(--color-white)
 }
-p.font.font-3{
-  font-family: 'Futura', AppleSDGothicNeo, 'Malgun Gothic', '맑은 고딕', Roboto, 'Helvetica Neue', '애플 SD 산돌고딕 Neo', dotum, gulim, Helvetica, Arial, sans-serif;
-  font-weight: 600
+html.mode-red section.section{
+  background: var(--color-red);
+  color:var(--color-white)
+}
+html.mode-green section.section{
+  background: var(--color-green);
+  color:var(--color-white)
 }
 
+.section{
+  display: flex;
+  width:100vw;
+  height:100vh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap:20px;
+  transition: background 180ms ease-in-out;
+  -moz-transition: background 180ms ease-in-out;
+  -webkit-transition: background 180ms ease-in-out;
+  -o-transition: background 180ms ease-in-out
+}
+.section h1.headline{
+  position:relative;
+  font-size: 2rem;
+  line-height: 3rem;
+  text-transform: uppercase
+}
+.section p.copy{
+  font-size: 1.5rem;
+  line-height: 2rem
+}
 
+nav#mode-menu{
+  position:absolute;
+  top:30px;
+  right:30px;
+  z-index: 10
+}
+nav#mode-menu ul {
+  display: flex;
+  gap:8px
+}
+nav#mode-menu ul li{
+  position: relative;
+  width:20px;
+  height:20px;
+  border-radius: 50%;
+  overflow: hidden;
+  text-indent: -9999rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  cursor: pointer
+}
+nav#mode-menu ul li::before,
+nav#mode-menu ul li::after {
+  content: '';
+  position: absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  border-radius: 50%;
+  box-sizing: border-box;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms ease-in-out;
+  -webkit-transition: opacity 180ms ease-in-out;
+  -moz-transition: opacity 180ms ease-in-out;
+  -o-transition: opacity 180ms ease-in-out;
+}
+
+nav#mode-menu ul li.selected::before,
+nav#mode-menu ul li:not(.selected)::after{
+  background: rgba(255, 255, 255, 0.5)
+}
+
+nav#mode-menu ul li:hover::after{
+  opacity: 1;
+}
+
+nav#mode-menu ul li.selected{
+  cursor: default;
+}
+nav#mode-menu ul li.selected::before {
+  opacity: 1;
+}
+
+nav#mode-menu ul li:first-child{
+  background: var(--color-light)
+}
+nav#mode-menu ul li:first-child::before{
+  border: 1px solid var(--color-light-border);
+}
+nav#mode-menu ul li:nth-child(2){
+  background: var(--color-dark)
+}
+nav#mode-menu ul li:nth-child(3){
+  background: var(--color-red)
+}
+nav#mode-menu ul li:last-child{
+  background: var(--color-green)
+}

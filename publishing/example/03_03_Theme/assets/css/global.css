@@ -2,9 +2,14 @@
 
 :root {
   --color-dark: #222222;
+  --color-dark-bg: #242424;
   --color-default: #000000;
   --color-white: #ffffff;
-  --color-gray: #f5f5f5
+  --color-gray: #f5f5f5;
+  --color-light: #f9f9f9;
+  --color-light-border: #999999;
+  --color-red: #fe557b;
+  --color-green: #00a99d
 }
 
 /*-- Reset. --*/
